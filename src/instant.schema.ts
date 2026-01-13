@@ -1,35 +1,50 @@
+/** @format */
+
 // Docs: https://www.instantdb.com/docs/modeling-data
 
-import { i } from '@instantdb/react'
+import { i } from '@instantdb/core'
 
 const _schema = i.schema({
   entities: {
     $files: i.entity({
       path: i.string().unique().indexed(),
       url: i.string(),
+      created: i.date().indexed().optional(),
+      updated: i.date().indexed().optional(),
     }),
     $users: i.entity({
+      // System Columns
       email: i.string().unique().indexed().optional(),
       imageURL: i.string().optional(),
       type: i.string().optional(),
+      // Custom Columns
+      avatarURL: i.string().optional(),
+      plan: i.string().optional(),
+      firstName: i.string().optional(),
+      lastName: i.string().optional(),
+      created: i.date().optional(),
+      updated: i.date().optional(),
+      lastLogon: i.date().optional(),
     }),
   },
   links: {
-    $usersLinkedPrimaryUser: {
+    // ------------------------
+    //        User Links
+    // ------------------------
+    userFiles: {
       forward: {
-        on: '$users',
+        on: '$files',
         has: 'one',
-        label: 'linkedPrimaryUser',
+        label: 'owner',
         onDelete: 'cascade',
-      },
+      }, // Each file has one owner, which is a user id
       reverse: {
         on: '$users',
         has: 'many',
-        label: 'linkedGuestUsers',
-      },
+        label: 'files',
+      }, // Each user can have many files
     },
   },
-  rooms: {},
 })
 
 // This helps Typescript display nicer intellisense

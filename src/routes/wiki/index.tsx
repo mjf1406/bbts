@@ -5,5 +5,5 @@ export const Route = createFileRoute('/wiki/')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/login/"!</div>
+  return <div>Hello "/wiki/"!</div>
 }
