@@ -1,0 +1,35 @@
+import { Link } from '@tanstack/react-router'
+import { BarChart3, Book, Dumbbell, LogIn } from 'lucide-react'
+import { NavLink } from './nav-link'
+import { ThemeSwitch } from '@/components/themes/theme-switch'
+
+export default function Navbar() {
+  return (
+    <nav className="sticky top-0 z-50 w-full max-w-7xl mx-auto border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 flex items-center justify-between px-4 py-2">
+      {/* Logo and Text - Left */}
+      <Link
+        to="/"
+        className="flex items-center gap-2 justify-center hover:opacity-80 transition-opacity"
+      >
+        <img
+          src="/brand/logo-with-text.webp"
+          alt="BBTS Logo"
+          className="h-8 w-auto"
+        />
+      </Link>
+
+      {/* Navigation Links - Middle */}
+      <div className="flex items-center gap-1">
+        <NavLink to="/exercises" icon={Dumbbell} label="Exercises" />
+        <NavLink to="/tracking" icon={BarChart3} label="Tracking" />
+        <NavLink to="/wiki" icon={Book} label="Wiki" />
+        <NavLink to="/login" icon={LogIn} label="Login" />
+      </div>
+
+      {/* Theme Switcher - Right */}
+      <div className="flex items-center">
+        <ThemeSwitch />
+      </div>
+    </nav>
+  )
+}
