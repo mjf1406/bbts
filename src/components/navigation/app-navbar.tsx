@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
-import { BarChart3, Book, Dumbbell, LogIn } from 'lucide-react'
+import { BarChart3, Book, Dumbbell } from 'lucide-react'
 import { NavLink } from './nav-link'
-import { ThemeSwitch } from '@/components/themes/theme-switch'
+import { NavUser } from './nav-user'
 
 export default function Navbar() {
   return (
@@ -14,7 +14,7 @@ export default function Navbar() {
         <img
           src="/brand/logo-with-text.webp"
           alt="BBTS Logo"
-          className="h-8 w-auto"
+          className="h-12 w-auto"
         />
       </Link>
 
@@ -23,12 +23,11 @@ export default function Navbar() {
         <NavLink to="/exercises" icon={Dumbbell} label="Exercises" />
         <NavLink to="/tracking" icon={BarChart3} label="Tracking" />
         <NavLink to="/wiki" icon={Book} label="Wiki" />
-        <NavLink to="/login" icon={LogIn} label="Login" />
       </div>
 
-      {/* Theme Switcher - Right */}
+      {/* User Menu - Right */}
       <div className="flex items-center">
-        <ThemeSwitch />
+        <NavUser />
       </div>
     </nav>
   )

@@ -14,6 +14,7 @@ import { Route as WikiIndexRouteImport } from './routes/wiki/index'
 import { Route as TrackingIndexRouteImport } from './routes/tracking/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ExercisesIndexRouteImport } from './routes/exercises/index'
+import { Route as BlockedIndexRouteImport } from './routes/blocked/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,9 +41,15 @@ const ExercisesIndexRoute = ExercisesIndexRouteImport.update({
   path: '/exercises/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlockedIndexRoute = BlockedIndexRouteImport.update({
+  id: '/blocked/',
+  path: '/blocked/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blocked': typeof BlockedIndexRoute
   '/exercises': typeof ExercisesIndexRoute
   '/login': typeof LoginIndexRoute
   '/tracking': typeof TrackingIndexRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/blocked': typeof BlockedIndexRoute
   '/exercises': typeof ExercisesIndexRoute
   '/login': typeof LoginIndexRoute
   '/tracking': typeof TrackingIndexRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/blocked/': typeof BlockedIndexRoute
   '/exercises/': typeof ExercisesIndexRoute
   '/login/': typeof LoginIndexRoute
   '/tracking/': typeof TrackingIndexRoute
@@ -65,14 +74,22 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/exercises' | '/login' | '/tracking' | '/wiki'
+  fullPaths: '/' | '/blocked' | '/exercises' | '/login' | '/tracking' | '/wiki'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/exercises' | '/login' | '/tracking' | '/wiki'
-  id: '__root__' | '/' | '/exercises/' | '/login/' | '/tracking/' | '/wiki/'
+  to: '/' | '/blocked' | '/exercises' | '/login' | '/tracking' | '/wiki'
+  id:
+    | '__root__'
+    | '/'
+    | '/blocked/'
+    | '/exercises/'
+    | '/login/'
+    | '/tracking/'
+    | '/wiki/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlockedIndexRoute: typeof BlockedIndexRoute
   ExercisesIndexRoute: typeof ExercisesIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   TrackingIndexRoute: typeof TrackingIndexRoute
@@ -116,11 +133,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExercisesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blocked/': {
+      id: '/blocked/'
+      path: '/blocked'
+      fullPath: '/blocked'
+      preLoaderRoute: typeof BlockedIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlockedIndexRoute: BlockedIndexRoute,
   ExercisesIndexRoute: ExercisesIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   TrackingIndexRoute: TrackingIndexRoute,

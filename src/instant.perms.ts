@@ -8,135 +8,17 @@ const dataBind = [
   // Authenticated user
   'isAuthenticated',
   'auth.id != null',
-  // User is a guest
-  'isGuest',
-  'auth.isGuest == true',
-  // User is not a guest
-  'isNotGuest',
-  'auth.isGuest == false',
   // User is the owner of the data
   'isOwner',
   "auth.id in data.ref('owner.id') || auth.id == data.id",
   // User is still the owner of the data
   'isStillOwner',
   "auth.id in newData.ref('owner.id') || auth.id == newData.id",
-  // User is a member of the home
-  'isHomeMember',
-  "auth.id in data.ref('homeMembers.id')",
-  // User is still a member of the home
-  'isStillHomeMember',
-  "auth.id in newData.ref('homeMembers.id')",
-  // User is an admin of the data (home admins)
-  'isAdmin',
-  "auth.id in data.ref('admins.id')",
-  // User is still an admin of the data
-  'isStillAdmin',
-  "auth.id in newData.ref('admins.id')",
-  // User is a viewer of the home
-  'isViewer',
-  "auth.id in data.ref('viewers.id')",
-  // User is still a viewer of the home
-  'isStillViewer',
-  "auth.id in newData.ref('viewers.id')",
-  // User is owner of the home that the join code belongs to
-  'isJoinCodeHomeOwner',
-  "auth.id in data.ref('home.owner.id')",
-  // User is admin of the home that the join code belongs to
-  'isJoinCodeHomeAdmin',
-  "auth.id in data.ref('home.admins.id')",
-  // User is owner of the home that the join code request's join code belongs to
-  'isJoinCodeRequestHomeOwner',
-  "auth.id in data.ref('joinCode.home.owner.id')",
-  // User is admin of the home that the join code request's join code belongs to
-  'isJoinCodeRequestHomeAdmin',
-  "auth.id in data.ref('joinCode.home.admins.id')",
-  // User created the join code request
-  'isJoinCodeRequestCreator',
-  "auth.id in data.ref('user.id')",
-  // User is owner of the home that the recipe belongs to
-  'isRecipeHomeOwner',
-  "auth.id in data.ref('home.owner.id')",
-  // User is admin of the home that the recipe belongs to
-  'isRecipeHomeAdmin',
-  "auth.id in data.ref('home.admins.id')",
-  // User is a member of the home that the recipe belongs to
-  'isRecipeHomeMember',
-  "auth.id in data.ref('home.homeMembers.id')",
-  // User is a viewer of the home that the recipe belongs to
-  'isRecipeHomeViewer',
-  "auth.id in data.ref('home.viewers.id')",
-  // User is owner of the home that the file belongs to
-  'isFileHomeOwner',
-  "auth.id in data.ref('home.owner.id')",
-  // User is admin of the home that the file belongs to
-  'isFileHomeAdmin',
-  "auth.id in data.ref('home.admins.id')",
-  // User is a member of the home that the file belongs to
-  'isFileHomeMember',
-  "auth.id in data.ref('home.homeMembers.id')",
-  // User is a viewer of the home that the file belongs to
-  'isFileHomeViewer',
-  "auth.id in data.ref('home.viewers.id')",
-  // User is owner of the home that the note's recipe belongs to
-  'isNoteRecipeHomeOwner',
-  "auth.id in data.ref('recipe.home.owner.id')",
-  // User is admin of the home that the note's recipe belongs to
-  'isNoteRecipeHomeAdmin',
-  "auth.id in data.ref('recipe.home.admins.id')",
-  // User is a member of the home that the note's recipe belongs to
-  'isNoteRecipeHomeMember',
-  "auth.id in data.ref('recipe.home.homeMembers.id')",
-  // User is a viewer of the home that the note's recipe belongs to
-  'isNoteRecipeHomeViewer',
-  "auth.id in data.ref('recipe.home.viewers.id')",
-  // User is owner of the home that the folder belongs to
-  'isFolderHomeOwner',
-  "auth.id in data.ref('home.owner.id')",
-  // User is admin of the home that the folder belongs to
-  'isFolderHomeAdmin',
-  "auth.id in data.ref('home.admins.id')",
-  // User is a member of the home that the folder belongs to
-  'isFolderHomeMember',
-  "auth.id in data.ref('home.homeMembers.id')",
-  // User is a viewer of the home that the folder belongs to
-  'isFolderHomeViewer',
-  "auth.id in data.ref('home.viewers.id')",
-  // User is owner of the home that the meal plan belongs to
-  'isMealPlanHomeOwner',
-  "auth.id in data.ref('home.owner.id')",
-  // User is admin of the home that the meal plan belongs to
-  'isMealPlanHomeAdmin',
-  "auth.id in data.ref('home.admins.id')",
-  // User is a member of the home that the meal plan belongs to
-  'isMealPlanHomeMember',
-  "auth.id in data.ref('home.homeMembers.id')",
-  // User is a viewer of the home that the meal plan belongs to
-  'isMealPlanHomeViewer',
-  "auth.id in data.ref('home.viewers.id')",
-  // User is owner of the home that the meal slot's meal plan belongs to
-  'isMealSlotHomeOwner',
-  "auth.id in data.ref('mealPlan.home.owner.id')",
-  // User is admin of the home that the meal slot's meal plan belongs to
-  'isMealSlotHomeAdmin',
-  "auth.id in data.ref('mealPlan.home.admins.id')",
-  // User is a member of the home that the meal slot's meal plan belongs to
-  'isMealSlotHomeMember',
-  "auth.id in data.ref('mealPlan.home.homeMembers.id')",
-  // User is a viewer of the home that the meal slot's meal plan belongs to
-  'isMealSlotHomeViewer',
-  "auth.id in data.ref('mealPlan.home.viewers.id')",
-  // User is owner of the home that the meal slot recipe's meal slot's meal plan belongs to
-  'isMealSlotRecipeHomeOwner',
-  "auth.id in data.ref('mealSlot.mealPlan.home.owner.id')",
-  // User is admin of the home that the meal slot recipe's meal slot's meal plan belongs to
-  'isMealSlotRecipeHomeAdmin',
-  "auth.id in data.ref('mealSlot.mealPlan.home.admins.id')",
-  // User is a member of the home that the meal slot recipe's meal slot's meal plan belongs to
-  'isMealSlotRecipeHomeMember',
-  "auth.id in data.ref('mealSlot.mealPlan.home.homeMembers.id')",
-  // User is a viewer of the home that the meal slot recipe's meal slot's meal plan belongs to
-  'isMealSlotRecipeHomeViewer',
-  "auth.id in data.ref('mealSlot.mealPlan.home.viewers.id')",
+  // User's email is in the allowed test users list
+  // NOTE: Update this to match ALLOWED_TEST_USERS in .env file
+  // Format: "auth.email != null && (auth.email == 'email1@example.com' || auth.email == 'email2@example.com' || ...)"
+  'isAllowedTestUser',
+  "auth.email != null && (auth.email == 'michael.fitzgerald.1406@gmail.com')",
 ]
 
 const rules = {
@@ -147,19 +29,18 @@ const rules = {
   },
   $files: {
     allow: {
-      create: 'isAuthenticated',
-      view: "isAuthenticated && (auth.id in data.ref('owner.id') || isFileHomeOwner || isFileHomeAdmin || isFileHomeMember || isFileHomeViewer)",
-      update:
-        "isAuthenticated && (data.ref('owner.id') == [] || (auth.id in data.ref('owner.id') && auth.id in newData.ref('owner.id')))", // Allow update if: no owner yet (new file) OR you are the owner and remain the owner
-      delete: "isAuthenticated && auth.id in data.ref('owner.id')",
+      create: 'isAuthenticated && isAllowedTestUser',
+      view: 'isAuthenticated && isOwner && isAllowedTestUser',
+      update: 'isAuthenticated && isOwner && isStillOwner && isAllowedTestUser', // Allow update if: no owner yet (new file) OR you are the owner and remain the owner
+      delete: 'isAuthenticated && isOwner && isAllowedTestUser',
     },
     bind: dataBind,
   },
   $users: {
     allow: {
-      view: 'isAuthenticated',
+      view: 'isAuthenticated && isAllowedTestUser',
       create: 'false',
-      update: 'isAuthenticated && isOwner && isStillOwner',
+      update: 'isAuthenticated && isOwner && isStillOwner && isAllowedTestUser',
       delete: 'false',
     },
     bind: dataBind,

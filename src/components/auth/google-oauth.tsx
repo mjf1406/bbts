@@ -4,19 +4,29 @@ import { useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from '@tanstack/react-router'
 import { db } from '@/lib/db/db'
 import { Button } from '@/components/ui/button'
 
 interface GoogleJwtPayload {
   given_name?: string
   family_name?: string
+  email?: string
 }
 
 const GOOGLE_CLIENT_NAME = import.meta.env.VITE_GOOGLE_CLIENT_NAME!
 
+// Allowed test users - must match the list in src/instant.perms.ts
+// NOTE: This list will be visible in the client bundle, but provides early validation
+const ALLOWED_TEST_USERS = [
+  'michael.fitzgerald.1406@gmail.com',
+  // Add more emails here as needed
+].map((email) => email.toLowerCase())
+
 function handleGoogleSuccess(
   credentialResponse: { credential?: string },
   nonce: string,
+  navigate: ReturnType<typeof useNavigate>,
 ) {
   if (!GOOGLE_CLIENT_NAME) {
     console.error('Google Client Name is not configured')
@@ -32,13 +42,22 @@ function handleGoogleSuccess(
     return
   }
 
-  // Store JWT token temporarily
-  sessionStorage.setItem('google_id_token', credentialResponse.credential)
-
-  // Decode JWT to extract user's name
+  // Decode JWT to extract user's email and name
   const decoded = jwtDecode<GoogleJwtPayload>(credentialResponse.credential)
+  const email = decoded.email?.toLowerCase() || ''
   const firstName = decoded.given_name || ''
   const lastName = decoded.family_name || ''
+
+  // Check if email is in allowed test users list
+  if (!email || !ALLOWED_TEST_USERS.includes(email)) {
+    console.error('Email not in allowed test users list:', email)
+    sessionStorage.removeItem('google_id_token')
+    navigate({ to: '/blocked' })
+    return
+  }
+
+  // Store JWT token temporarily
+  sessionStorage.setItem('google_id_token', credentialResponse.credential)
 
   db.auth
     .signInWithIdToken({
@@ -47,40 +66,53 @@ function handleGoogleSuccess(
       nonce,
     })
     .then(async (result) => {
-      if (result.user) {
-        // Check if created is null and set it if needed
-        const { data } = await db.queryOnce({
-          $users: {
-            $: { where: { id: result.user.id } },
-          },
-        })
-        const userData = data?.$users?.[0]
-        const updateData: {
-          firstName: string
-          lastName: string
-          plan: string
-          lastLogon: Date
-          created?: Date
-        } = {
-          firstName,
-          lastName,
-          plan: 'free',
-          lastLogon: new Date(),
-        }
-        if (userData && !userData.created) {
-          updateData.created = new Date()
-        }
-        // Update user profile directly using client-side transaction
-        db.transact(db.tx.$users[result.user.id].update(updateData))
+      // Check if created is null and set it if needed
+      const { data } = await db.queryOnce({
+        $users: {
+          $: { where: { id: result.user.id } },
+        },
+      })
+      const userData = data.$users[0]
+      const updateData: {
+        firstName: string
+        lastName: string
+        plan: string
+        lastLogon: Date
+        created?: Date
+      } = {
+        firstName,
+        lastName,
+        plan: 'free',
+        lastLogon: new Date(),
       }
+      if (!userData.created) {
+        updateData.created = new Date()
+      }
+      // Update user profile directly using client-side transaction
+      db.transact(db.tx.$users[result.user.id].update(updateData))
     })
-    .catch((err) => {
+    .catch(async (err) => {
       console.error('Error signing in with Google:', err)
       // Clear token on error
       sessionStorage.removeItem('google_id_token')
-      alert(
-        'Failed to sign in with Google: ' + (err.body?.message || err.message),
-      )
+
+      // Check if error is due to permissions (user not authorized)
+      const errorMessage = err.body?.message || err.message || ''
+      if (
+        errorMessage.includes('permission') ||
+        errorMessage.includes('unauthorized') ||
+        errorMessage.includes('not allowed')
+      ) {
+        // Sign out if they somehow got authenticated but aren't authorized
+        try {
+          await db.auth.signOut()
+        } catch (signOutErr) {
+          console.error('Error signing out:', signOutErr)
+        }
+        navigate({ to: '/blocked' })
+      } else {
+        alert('Failed to sign in with Google: ' + errorMessage)
+      }
     })
 }
 
@@ -91,6 +123,7 @@ function handleGoogleError() {
 export function GoogleOAuthButton() {
   const googleButtonRef = useRef<HTMLDivElement>(null)
   const [nonce] = useState(() => uuidv4())
+  const navigate = useNavigate()
 
   const handleGoogleButtonClick = () => {
     const googleButton = googleButtonRef.current?.querySelector(
@@ -106,7 +139,7 @@ export function GoogleOAuthButton() {
       <div ref={googleButtonRef} className="hidden">
         <GoogleLogin
           onSuccess={(credentialResponse) =>
-            handleGoogleSuccess(credentialResponse, nonce)
+            handleGoogleSuccess(credentialResponse, nonce, navigate)
           }
           onError={handleGoogleError}
           nonce={nonce}
@@ -154,6 +187,7 @@ export function GoogleOAuthButton() {
 export function GoogleOAuthButtonSmall() {
   const googleButtonRef = useRef<HTMLDivElement>(null)
   const [nonce] = useState(() => uuidv4())
+  const navigate = useNavigate()
 
   const handleGoogleButtonClick = () => {
     const googleButton = googleButtonRef.current?.querySelector(
@@ -169,7 +203,7 @@ export function GoogleOAuthButtonSmall() {
       <div ref={googleButtonRef} className="hidden">
         <GoogleLogin
           onSuccess={(credentialResponse) =>
-            handleGoogleSuccess(credentialResponse, nonce)
+            handleGoogleSuccess(credentialResponse, nonce, navigate)
           }
           onError={handleGoogleError}
           nonce={nonce}

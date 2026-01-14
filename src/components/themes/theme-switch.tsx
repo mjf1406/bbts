@@ -50,7 +50,7 @@ export function ThemeSwitch() {
     <RadioGroup
       value={currentTheme}
       onValueChange={handleThemeChange}
-      className="inline-flex items-center gap-0.5 rounded-md border border-input bg-background p-0.5 shadow-sm"
+      className="inline-flex items-center gap-0.5 rounded-md w-fit border border-input bg-background p-0.5 shadow-sm"
       aria-label="Theme selection"
       role="radiogroup"
     >

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext } from 'react'
 import { db } from '@/lib/db/db'
+import { useNavigate } from '@tanstack/react-router'
 
 interface AuthContextValue {
   user: {
@@ -58,6 +59,7 @@ export default function AuthProvider({
   }
 
   const { user, isLoading: authLoading, error: authError } = db.useAuth()
+  const navigate = useNavigate()
 
   // Query user data only if authenticated
   const { data, isLoading: dataLoading } = db.useQuery(
@@ -70,7 +72,32 @@ export default function AuthProvider({
       : null,
   )
 
-  const userData = data?.$users?.[0]
+  const userData = data?.$users[0]
+
+  // Check if user is authenticated but can't access their user data (not authorized)
+  // This happens when permissions block access to $users
+  React.useEffect(() => {
+    if (
+      user &&
+      user.id &&
+      !authLoading &&
+      !dataLoading &&
+      !userData &&
+      !user.isGuest
+    ) {
+      // User is authenticated but can't access their user record - they're not authorized
+      console.warn('User authenticated but not authorized - signing out')
+      db.auth
+        .signOut()
+        .then(() => {
+          navigate({ to: '/blocked' })
+        })
+        .catch((err) => {
+          console.error('Error signing out unauthorized user:', err)
+          navigate({ to: '/blocked' })
+        })
+    }
+  }, [user?.id, authLoading, dataLoading, userData, user?.isGuest, navigate])
 
   // Only show loading if:
   // 1. Auth is still loading, OR
@@ -78,11 +105,14 @@ export default function AuthProvider({
   // If user is null, queries are null so they won't be loading
   const isLoading = authLoading || (user?.id ? dataLoading : false)
 
+  // If user is authenticated but can't access their data, treat as not authenticated
+  const isAuthorized = user?.id ? userData !== undefined || user.isGuest : false
+
   const value: AuthContextValue = {
     user: {
       created_at: userData?.created || null,
       email: user?.email || '',
-      id: user?.id || '',
+      id: isAuthorized ? user?.id || '' : '',
       imageURL: user?.imageURL || null,
       avatarURL: userData?.avatarURL || null,
       isGuest: user?.isGuest || false,

@@ -24,3 +24,9 @@ This is a replication of Jeff Nippard's bodybuilding system which can be purchas
 -
 
 ### Change Log
+
+#### 2026/01/14
+
+- FT: added blocked route to handle unauthorized users
+- BE: Google OAuth only works for authorized users
+- UX: basic layout for everywhere
