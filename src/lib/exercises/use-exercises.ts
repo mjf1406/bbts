@@ -1,12 +1,20 @@
 /** @format */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { db } from '@/lib/db/db'
 
 const ITEMS_PER_PAGE = 10
 
-export function useExercises() {
-  const [currentPage, setCurrentPage] = useState(1)
+export function useExercises(
+  initialPage: number = 1,
+  onPageChange?: (page: number) => void,
+) {
+  const [currentPage, setCurrentPage] = useState(initialPage)
+
+  // Sync with initial page from query params
+  useEffect(() => {
+    setCurrentPage(initialPage)
+  }, [initialPage])
 
   // Query all exercises (no pagination from InstantDB - use large limit)
   const query = {
@@ -36,23 +44,29 @@ export function useExercises() {
   const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page)
+      onPageChange?.(page)
     }
   }
 
   const goToNextPage = () => {
     if (hasNextPage) {
-      setCurrentPage((prev) => prev + 1)
+      const nextPage = currentPage + 1
+      setCurrentPage(nextPage)
+      onPageChange?.(nextPage)
     }
   }
 
   const goToPreviousPage = () => {
     if (hasPreviousPage) {
-      setCurrentPage((prev) => prev - 1)
+      const prevPage = currentPage - 1
+      setCurrentPage(prevPage)
+      onPageChange?.(prevPage)
     }
   }
 
   const goToFirstPage = () => {
     setCurrentPage(1)
+    onPageChange?.(1)
   }
 
   return {

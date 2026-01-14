@@ -54,6 +54,15 @@ const rules = {
     },
     bind: dataBind,
   },
+  program: {
+    allow: {
+      view: 'isAuthenticated && isAllowedTestUser',
+      create: 'isAuthenticated && isAllowedTestUser',
+      update: 'isAuthenticated && isAllowedTestUser',
+      delete: 'isAuthenticated && isAllowedTestUser',
+    },
+    bind: dataBind,
+  },
 } satisfies InstantRules
 
 export default rules

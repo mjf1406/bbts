@@ -191,7 +191,7 @@ function CodeStep({
         setIsLoading(false)
         onSuccess()
         // Redirect to exercises after successful login
-        navigate({ to: '/exercises' })
+        navigate({ to: '/exercises', search: { page: 1 } })
       })
       .catch((err) => {
         setIsLoading(false)

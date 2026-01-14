@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { BarChart3, Book, Dumbbell } from 'lucide-react'
+import { BarChart3, Book, CalendarDays, Dumbbell } from 'lucide-react'
 import { NavLink } from './nav-link'
 import { NavUser } from './nav-user'
 
@@ -27,6 +27,7 @@ export default function Navbar() {
         {/* Navigation Links - Middle */}
         <div className="flex items-center gap-1">
           <NavLink to="/exercises" icon={Dumbbell} label="Exercises" />
+          <NavLink to="/program" icon={CalendarDays} label="Program" />
           <NavLink to="/guidebook" icon={Book} label="Guidebook" />
           <NavLink to="/tracking" icon={BarChart3} label="Tracking" />
         </div>

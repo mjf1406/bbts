@@ -4,16 +4,16 @@ import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { db } from '@/lib/db/db'
-import { useExercises } from '@/lib/exercises/use-exercises'
-import { importExercisesFromCSV } from '@/lib/exercises/import-exercises'
-import { ExercisesHeader } from '@/lib/exercises/-components/exercises-header'
-import { ExercisesTable } from '@/lib/exercises/-components/exercises-table'
-import { ExercisesPagination } from '@/lib/exercises/-components/exercises-pagination'
-import { ExercisesActions } from '@/lib/exercises/-components/exercises-actions'
-import { ExercisesMessage } from '@/lib/exercises/-components/exercises-message'
+import { useProgram } from '@/lib/program/use-program'
+import { importProgramFromCSV } from '@/lib/program/import-program'
+import { ProgramHeader } from '@/lib/program/-components/program-header'
+import { ProgramTable } from '@/lib/program/-components/program-table'
+import { ProgramPagination } from '@/lib/program/-components/program-pagination'
+import { ProgramActions } from '@/lib/program/-components/program-actions'
+import { ProgramMessage } from '@/lib/program/-components/program-message'
 import { useAuthContext } from '@/components/auth/auth-provider'
 
-export const Route = createFileRoute('/exercises/')({
+export const Route = createFileRoute('/program/')({
   validateSearch: (search: Record<string, unknown>) => {
     const page = search.page
     const pageNum =
@@ -26,32 +26,44 @@ export const Route = createFileRoute('/exercises/')({
 })
 
 function RouteComponent() {
-  const search = useSearch({ from: '/exercises/' })
+  const search = useSearch({ from: '/program/' })
   const navigate = useNavigate()
   const pageFromQuery = search.page ?? 1
 
   const {
-    exercises,
-    allExercises,
+    programEntries,
+    allProgramEntries,
     isLoading,
     error,
     currentPage,
     totalPages,
     totalCount,
+    totalWeeks,
+    currentWeek,
     hasNextPage,
     hasPreviousPage,
     goToPage,
     goToNextPage,
     goToPreviousPage,
     goToFirstPage,
-    itemsPerPage,
-  } = useExercises(pageFromQuery, (page: number) => {
+  } = useProgram(pageFromQuery, (page: number) => {
     navigate({
-      to: '/exercises',
+      to: '/program',
       search: { page },
       replace: true,
     })
   })
+
+  // Query exercises for linking
+  const exercisesQuery = {
+    exercises: {
+      $: {
+        first: 10000,
+      },
+    },
+  }
+  const { data: exercisesData } = db.useQuery(exercisesQuery)
+  const exercises = exercisesData?.exercises || []
 
   const [isImporting, setIsImporting] = useState(false)
   const [importMessage, setImportMessage] = useState<string | null>(null)
@@ -66,10 +78,10 @@ function RouteComponent() {
     }
   }, [user.id, authLoading, navigate])
 
-  const hasExistingExercises = totalCount > 0
+  const hasExistingEntries = totalCount > 0
 
   const handleImportClick = () => {
-    if (hasExistingExercises) {
+    if (hasExistingEntries) {
       setShowConfirmDialog(true)
     } else {
       handleImport()
@@ -81,7 +93,7 @@ function RouteComponent() {
     setIsImporting(true)
     setImportMessage(null)
     try {
-      const result = await importExercisesFromCSV()
+      const result = await importProgramFromCSV(exercises)
       setImportMessage(result.message)
       if (result.success) {
         // Refresh the query after a short delay
@@ -91,7 +103,7 @@ function RouteComponent() {
       }
     } catch (err) {
       setImportMessage(
-        err instanceof Error ? err.message : 'Failed to import exercises',
+        err instanceof Error ? err.message : 'Failed to import program',
       )
     } finally {
       setIsImporting(false)
@@ -103,19 +115,19 @@ function RouteComponent() {
     setIsDeleting(true)
     setImportMessage(null)
     try {
-      if (allExercises.length === 0) {
-        setImportMessage('No exercises to delete')
+      if (allProgramEntries.length === 0) {
+        setImportMessage('No program entries to delete')
         setIsDeleting(false)
         return
       }
 
-      // Delete all exercises in transactions
-      for (const exercise of allExercises) {
-        await db.transact(db.tx.exercises[exercise.id].delete())
+      // Delete all program entries in transactions
+      for (const entry of allProgramEntries) {
+        await db.transact(db.tx.program[entry.id].delete())
       }
 
       setImportMessage(
-        `Successfully deleted ${allExercises.length} exercise${allExercises.length === 1 ? '' : 's'}`,
+        `Successfully deleted ${allProgramEntries.length} program entr${allProgramEntries.length === 1 ? 'y' : 'ies'}`,
       )
 
       // Reset to first page and reload
@@ -127,7 +139,7 @@ function RouteComponent() {
       }, 1000)
     } catch (err) {
       setImportMessage(
-        err instanceof Error ? err.message : 'Failed to delete exercises',
+        err instanceof Error ? err.message : 'Failed to delete program entries',
       )
     } finally {
       setIsDeleting(false)
@@ -136,15 +148,15 @@ function RouteComponent() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <ExercisesHeader
-        hasExistingExercises={hasExistingExercises}
+      <ProgramHeader
+        hasExistingEntries={hasExistingEntries}
         isDeleting={isDeleting}
         isImporting={isImporting}
         onDeleteClick={() => setShowDeleteDialog(true)}
         onImportClick={handleImportClick}
       />
 
-      <ExercisesMessage message={importMessage} />
+      <ProgramMessage message={importMessage} />
 
       {isLoading ? (
         <div className="flex justify-center items-center py-12">
@@ -152,36 +164,32 @@ function RouteComponent() {
         </div>
       ) : error ? (
         <div className="text-red-500">
-          Error loading exercises: {error.message}
+          Error loading program: {error.message}
         </div>
-      ) : exercises.length === 0 ? (
+      ) : programEntries.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
-          No exercises found. Click "Seed Exercises" to import exercises from
-          CSV.
+          No program entries found. Click "Seed Program" to import program
+          entries from CSV.
         </div>
       ) : (
         <>
-          <ExercisesPagination
+          <ProgramPagination
             currentPage={currentPage}
             totalPages={totalPages}
-            totalCount={totalCount}
-            itemsPerPage={itemsPerPage}
             hasNextPage={hasNextPage}
             hasPreviousPage={hasPreviousPage}
             onPageChange={goToPage}
             onNextPage={goToNextPage}
             onPreviousPage={goToPreviousPage}
+            currentWeek={currentWeek}
+            totalWeeks={totalWeeks}
           />
 
-          <ExercisesTable
-            exercises={exercises}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-          />
+          <ProgramTable programEntries={programEntries} />
         </>
       )}
 
-      <ExercisesActions
+      <ProgramActions
         showConfirmDialog={showConfirmDialog}
         showDeleteDialog={showDeleteDialog}
         totalCount={totalCount}

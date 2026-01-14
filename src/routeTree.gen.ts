@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrackingIndexRouteImport } from './routes/tracking/index'
+import { Route as ProgramIndexRouteImport } from './routes/program/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as GuidebookIndexRouteImport } from './routes/guidebook/index'
 import { Route as ExercisesIndexRouteImport } from './routes/exercises/index'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const TrackingIndexRoute = TrackingIndexRouteImport.update({
   id: '/tracking/',
   path: '/tracking/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramIndexRoute = ProgramIndexRouteImport.update({
+  id: '/program/',
+  path: '/program/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/exercises': typeof ExercisesIndexRoute
   '/guidebook': typeof GuidebookIndexRoute
   '/login': typeof LoginIndexRoute
+  '/program': typeof ProgramIndexRoute
   '/tracking': typeof TrackingIndexRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/exercises': typeof ExercisesIndexRoute
   '/guidebook': typeof GuidebookIndexRoute
   '/login': typeof LoginIndexRoute
+  '/program': typeof ProgramIndexRoute
   '/tracking': typeof TrackingIndexRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/exercises/': typeof ExercisesIndexRoute
   '/guidebook/': typeof GuidebookIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/program/': typeof ProgramIndexRoute
   '/tracking/': typeof TrackingIndexRoute
 }
 export interface FileRouteTypes {
@@ -80,9 +89,17 @@ export interface FileRouteTypes {
     | '/exercises'
     | '/guidebook'
     | '/login'
+    | '/program'
     | '/tracking'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blocked' | '/exercises' | '/guidebook' | '/login' | '/tracking'
+  to:
+    | '/'
+    | '/blocked'
+    | '/exercises'
+    | '/guidebook'
+    | '/login'
+    | '/program'
+    | '/tracking'
   id:
     | '__root__'
     | '/'
@@ -90,6 +107,7 @@ export interface FileRouteTypes {
     | '/exercises/'
     | '/guidebook/'
     | '/login/'
+    | '/program/'
     | '/tracking/'
   fileRoutesById: FileRoutesById
 }
@@ -99,6 +117,7 @@ export interface RootRouteChildren {
   ExercisesIndexRoute: typeof ExercisesIndexRoute
   GuidebookIndexRoute: typeof GuidebookIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
+  ProgramIndexRoute: typeof ProgramIndexRoute
   TrackingIndexRoute: typeof TrackingIndexRoute
 }
 
@@ -116,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/tracking'
       fullPath: '/tracking'
       preLoaderRoute: typeof TrackingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/program/': {
+      id: '/program/'
+      path: '/program'
+      fullPath: '/program'
+      preLoaderRoute: typeof ProgramIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login/': {
@@ -155,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExercisesIndexRoute: ExercisesIndexRoute,
   GuidebookIndexRoute: GuidebookIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
+  ProgramIndexRoute: ProgramIndexRoute,
   TrackingIndexRoute: TrackingIndexRoute,
 }
 export const routeTree = rootRouteImport

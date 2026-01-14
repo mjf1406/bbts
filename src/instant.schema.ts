@@ -34,6 +34,21 @@ const _schema = i.schema({
       created: i.date().indexed().optional(),
       updated: i.date().indexed().optional(),
     }),
+    program: i.entity({
+      idx: i.number().unique().indexed(),
+      week: i.string().indexed(),
+      day: i.string().optional(),
+      type: i.string().optional(),
+      lastSetIntensityTechnique: i.string().optional(),
+      warmupSets: i.string().optional(),
+      workingSets: i.string().optional(),
+      targetReps: i.string().optional(),
+      earlySetRPE: i.string().optional(),
+      lastSetRPE: i.string().optional(),
+      rest: i.string().optional(),
+      created: i.date().indexed().optional(),
+      updated: i.date().indexed().optional(),
+    }),
   },
   links: {
     // ------------------------
@@ -62,6 +77,18 @@ const _schema = i.schema({
         on: 'exercises',
         has: 'many',
         label: 'es',
+      },
+    },
+    programExercise: {
+      forward: {
+        on: 'program',
+        has: 'one',
+        label: 'exercise',
+      },
+      reverse: {
+        on: 'exercises',
+        has: 'many',
+        label: 'programs',
       },
     },
   },

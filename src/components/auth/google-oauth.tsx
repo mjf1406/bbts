@@ -91,7 +91,7 @@ function handleGoogleSuccess(
       // Update user profile directly using client-side transaction
       db.transact(db.tx.$users[result.user.id].update(updateData))
       // Redirect to exercises after successful login
-      navigate({ to: '/exercises' })
+      navigate({ to: '/exercises', search: { page: 1 } })
     })
     .catch(async (err) => {
       console.error('Error signing in with Google:', err)
