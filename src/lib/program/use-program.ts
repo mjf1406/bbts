@@ -21,7 +21,9 @@ export function useProgram(
         order: { idx: 'asc' as const },
         first: 10000, // Large number to get all program entries
       },
-      exercise: {},
+      exercise: {
+        substitutions: {},
+      },
     },
   }
 

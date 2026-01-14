@@ -26,6 +26,12 @@ interface ProgramEntry {
     | {
         id: string
         name: string
+        videoURLs?: string[]
+        substitutions?: Array<{
+          id: string
+          name: string
+          videoURLs?: string[]
+        }>
       }
   lastSetIntensityTechnique?: string
   warmupSets?: string
@@ -175,6 +181,7 @@ export function ProgramTable({ programEntries }: ProgramTableProps) {
             <TableHead className="w-24">Day</TableHead>
             <TableHead className="max-w-[200px]">Type</TableHead>
             <TableHead className="max-w-[200px]">Exercise</TableHead>
+            <TableHead className="max-w-[200px]">Substitutes</TableHead>
             <TableHead className="max-w-[150px]">Last Set Intensity</TableHead>
             <TableHead className="w-24">Warm-up Sets</TableHead>
             <TableHead className="w-24">Working Sets</TableHead>
@@ -207,11 +214,68 @@ export function ProgramTable({ programEntries }: ProgramTableProps) {
                   {entry.type || '-'}
                 </TableCell>
                 <TableCell className="max-w-[200px] whitespace-normal font-medium">
-                  {typeof entry.exercise === 'object' && entry.exercise !== null
-                    ? entry.exercise.name
-                    : typeof entry.exercise === 'string'
-                      ? entry.exercise
-                      : '-'}
+                  {typeof entry.exercise === 'object' && entry.exercise !== null ? (
+                    entry.exercise.videoURLs &&
+                    Array.isArray(entry.exercise.videoURLs) &&
+                    entry.exercise.videoURLs.length > 0 ? (
+                      <div className="flex flex-col gap-1">
+                        <span>{entry.exercise.name}</span>
+                        <div className="flex flex-col gap-0.5">
+                          {entry.exercise.videoURLs.map((url: string, idx: number) => (
+                            <a
+                              key={idx}
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-500 hover:underline text-xs break-all"
+                            >
+                              Video {idx + 1}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      entry.exercise.name
+                    )
+                  ) : typeof entry.exercise === 'string' ? (
+                    entry.exercise
+                  ) : (
+                    '-'
+                  )}
+                </TableCell>
+                <TableCell className="max-w-[200px] whitespace-normal text-xs">
+                  {typeof entry.exercise === 'object' &&
+                  entry.exercise !== null &&
+                  entry.exercise.substitutions &&
+                  Array.isArray(entry.exercise.substitutions) &&
+                  entry.exercise.substitutions.length > 0 ? (
+                    <div className="flex flex-col gap-1">
+                      {entry.exercise.substitutions.map((sub: any) => (
+                        <div key={sub.id} className="flex flex-col gap-0.5">
+                          <span className="font-medium">{sub.name}</span>
+                          {sub.videoURLs &&
+                          Array.isArray(sub.videoURLs) &&
+                          sub.videoURLs.length > 0 ? (
+                            <div className="flex flex-col gap-0.5">
+                              {sub.videoURLs.map((url: string, idx: number) => (
+                                <a
+                                  key={idx}
+                                  href={url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-500 hover:underline text-xs break-all"
+                                >
+                                  Video {idx + 1}
+                                </a>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="text-muted-foreground">None</span>
+                  )}
                 </TableCell>
                 <TableCell className="max-w-[150px] whitespace-normal text-xs">
                   {entry.lastSetIntensityTechnique || '-'}
