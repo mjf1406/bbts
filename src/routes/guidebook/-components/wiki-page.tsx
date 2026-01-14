@@ -17,11 +17,23 @@ import { WikiReferences } from './wiki-references'
 
 const tocItems = [
   { id: 'disclaimer', title: 'Disclaimer', level: 0 },
-  { id: 'welcome', title: 'Welcome to The Bodybuilding Transformation System', level: 0 },
-  { id: 'transformation-principles', title: 'The Transformation Principles', level: 0 },
+  {
+    id: 'welcome',
+    title: 'Welcome to The Bodybuilding Transformation System',
+    level: 0,
+  },
+  {
+    id: 'transformation-principles',
+    title: 'The Transformation Principles',
+    level: 0,
+  },
   { id: 'program-overview', title: 'Understanding The Program', level: 0 },
   { id: 'exercise-substitutions', title: 'Exercise Substitutions', level: 0 },
-  { id: 'whats-new', title: "What's New in the Bodybuilding Transformation System?", level: 0 },
+  {
+    id: 'whats-new',
+    title: "What's New in the Bodybuilding Transformation System?",
+    level: 0,
+  },
   { id: 'training-gear', title: 'Suggested Training Gear', level: 0 },
   { id: 'progress-tracking', title: 'Progress Tracking', level: 0 },
   { id: 'muscle-anatomy', title: 'Muscle Anatomy', level: 0 },

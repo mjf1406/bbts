@@ -14,7 +14,7 @@ function RouteComponent() {
 
   useEffect(() => {
     if (!isLoading && !user.id) {
-      navigate({ to: '/login' })
+      navigate({ to: '/blocked' })
     }
   }, [user.id, isLoading, navigate])
 
