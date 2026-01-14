@@ -1,7 +1,7 @@
 /** @format */
 
-import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { db } from '@/lib/db/db'
 import { useExercises } from '@/lib/exercises/use-exercises'
@@ -11,6 +11,7 @@ import { ExercisesTable } from '@/lib/exercises/-components/exercises-table'
 import { ExercisesPagination } from '@/lib/exercises/-components/exercises-pagination'
 import { ExercisesActions } from '@/lib/exercises/-components/exercises-actions'
 import { ExercisesMessage } from '@/lib/exercises/-components/exercises-message'
+import { useAuthContext } from '@/components/auth/auth-provider'
 
 export const Route = createFileRoute('/exercises/')({
   component: RouteComponent,
@@ -39,6 +40,14 @@ function RouteComponent() {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const { user, isLoading: authLoading } = useAuthContext()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!authLoading && !user.id) {
+      navigate({ to: '/blocked' })
+    }
+  }, [user.id, authLoading, navigate])
 
   const hasExistingExercises = totalCount > 0
 
