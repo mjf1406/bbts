@@ -26,6 +26,14 @@ const _schema = i.schema({
       updated: i.date().optional(),
       lastLogon: i.date().optional(),
     }),
+    exercises: i.entity({
+      name: i.string().unique().indexed(),
+      videoURLs: i.json().optional(),
+      imageURLs: i.json().optional(),
+      note: i.string().optional(),
+      created: i.date().indexed().optional(),
+      updated: i.date().indexed().optional(),
+    }),
   },
   links: {
     // ------------------------
@@ -43,6 +51,18 @@ const _schema = i.schema({
         has: 'many',
         label: 'files',
       }, // Each user can have many files
+    },
+    exerciseSubstitutions: {
+      forward: {
+        on: 'exercises',
+        has: 'many',
+        label: 'substitutions',
+      },
+      reverse: {
+        on: 'exercises',
+        has: 'many',
+        label: 'es',
+      },
     },
   },
 })

@@ -3,6 +3,7 @@
 import { Mail } from 'lucide-react'
 import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 
 import { db } from '@/lib/db/db'
 import { Button } from '@/components/ui/button'
@@ -158,6 +159,7 @@ function CodeStep({
   setIsLoading: (loading: boolean) => void
 }) {
   const [code, setCode] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -188,6 +190,8 @@ function CodeStep({
         }
         setIsLoading(false)
         onSuccess()
+        // Redirect to exercises after successful login
+        navigate({ to: '/exercises' })
       })
       .catch((err) => {
         setIsLoading(false)

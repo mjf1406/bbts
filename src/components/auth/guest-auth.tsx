@@ -3,8 +3,9 @@
 import { LogIn } from 'lucide-react'
 import { Button } from '../ui/button'
 import { db } from '@/lib/db/db'
+import { useNavigate } from '@tanstack/react-router'
 
-const handleGuestSignIn = () => {
+const handleGuestSignIn = (navigate: ReturnType<typeof useNavigate>) => {
   db.auth
     .signInAsGuest()
     .then((result) => {
@@ -15,6 +16,8 @@ const handleGuestSignIn = () => {
             lastLogon: new Date(),
           }),
         )
+        // Redirect to exercises after successful login
+        navigate({ to: '/exercises' })
       }
     })
     .catch((err) => {
@@ -24,9 +27,10 @@ const handleGuestSignIn = () => {
 }
 
 export default function TryAsGuestButton() {
+  const navigate = useNavigate()
   return (
     <Button
-      onClick={handleGuestSignIn}
+      onClick={() => handleGuestSignIn(navigate)}
       variant="outline"
       className="w-full items-center gap-2 justify-start"
       size="lg"
