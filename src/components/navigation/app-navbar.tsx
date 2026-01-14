@@ -27,8 +27,8 @@ export default function Navbar() {
         {/* Navigation Links - Middle */}
         <div className="flex items-center gap-1">
           <NavLink to="/exercises" icon={Dumbbell} label="Exercises" />
+          <NavLink to="/guidebook" icon={Book} label="Guidebook" />
           <NavLink to="/tracking" icon={BarChart3} label="Tracking" />
-          <NavLink to="/wiki" icon={Book} label="Wiki" />
         </div>
 
         {/* User Menu - Right */}

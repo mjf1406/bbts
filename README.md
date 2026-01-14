@@ -27,6 +27,9 @@ This is a replication of Jeff Nippard's bodybuilding system which can be purchas
 
 #### 2026/01/14
 
+- UI: added loading page
+- UI: added pagination to exercises page
+- UI: added guidebook route v0
 - FT: added blocked route to handle unauthorized users
 - BE: Google OAuth only works for authorized users
 - UX: basic layout for everywhere

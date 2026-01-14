@@ -10,20 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as WikiIndexRouteImport } from './routes/wiki/index'
 import { Route as TrackingIndexRouteImport } from './routes/tracking/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as GuidebookIndexRouteImport } from './routes/guidebook/index'
 import { Route as ExercisesIndexRouteImport } from './routes/exercises/index'
 import { Route as BlockedIndexRouteImport } from './routes/blocked/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WikiIndexRoute = WikiIndexRouteImport.update({
-  id: '/wiki/',
-  path: '/wiki/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrackingIndexRoute = TrackingIndexRouteImport.update({
@@ -34,6 +29,11 @@ const TrackingIndexRoute = TrackingIndexRouteImport.update({
 const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidebookIndexRoute = GuidebookIndexRouteImport.update({
+  id: '/guidebook/',
+  path: '/guidebook/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExercisesIndexRoute = ExercisesIndexRouteImport.update({
@@ -51,49 +51,55 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blocked': typeof BlockedIndexRoute
   '/exercises': typeof ExercisesIndexRoute
+  '/guidebook': typeof GuidebookIndexRoute
   '/login': typeof LoginIndexRoute
   '/tracking': typeof TrackingIndexRoute
-  '/wiki': typeof WikiIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blocked': typeof BlockedIndexRoute
   '/exercises': typeof ExercisesIndexRoute
+  '/guidebook': typeof GuidebookIndexRoute
   '/login': typeof LoginIndexRoute
   '/tracking': typeof TrackingIndexRoute
-  '/wiki': typeof WikiIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/blocked/': typeof BlockedIndexRoute
   '/exercises/': typeof ExercisesIndexRoute
+  '/guidebook/': typeof GuidebookIndexRoute
   '/login/': typeof LoginIndexRoute
   '/tracking/': typeof TrackingIndexRoute
-  '/wiki/': typeof WikiIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blocked' | '/exercises' | '/login' | '/tracking' | '/wiki'
+  fullPaths:
+    | '/'
+    | '/blocked'
+    | '/exercises'
+    | '/guidebook'
+    | '/login'
+    | '/tracking'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blocked' | '/exercises' | '/login' | '/tracking' | '/wiki'
+  to: '/' | '/blocked' | '/exercises' | '/guidebook' | '/login' | '/tracking'
   id:
     | '__root__'
     | '/'
     | '/blocked/'
     | '/exercises/'
+    | '/guidebook/'
     | '/login/'
     | '/tracking/'
-    | '/wiki/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BlockedIndexRoute: typeof BlockedIndexRoute
   ExercisesIndexRoute: typeof ExercisesIndexRoute
+  GuidebookIndexRoute: typeof GuidebookIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   TrackingIndexRoute: typeof TrackingIndexRoute
-  WikiIndexRoute: typeof WikiIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -103,13 +109,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/wiki/': {
-      id: '/wiki/'
-      path: '/wiki'
-      fullPath: '/wiki'
-      preLoaderRoute: typeof WikiIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tracking/': {
@@ -124,6 +123,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guidebook/': {
+      id: '/guidebook/'
+      path: '/guidebook'
+      fullPath: '/guidebook'
+      preLoaderRoute: typeof GuidebookIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/exercises/': {
@@ -147,9 +153,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlockedIndexRoute: BlockedIndexRoute,
   ExercisesIndexRoute: ExercisesIndexRoute,
+  GuidebookIndexRoute: GuidebookIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   TrackingIndexRoute: TrackingIndexRoute,
-  WikiIndexRoute: WikiIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
