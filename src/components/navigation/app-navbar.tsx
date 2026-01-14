@@ -13,9 +13,14 @@ export default function Navbar() {
           className="flex items-center gap-2 justify-center hover:opacity-80 transition-opacity"
         >
           <img
+            src="/brand/logo.webp"
+            alt="BBTS Logo"
+            className="h-8 md:hidden w-auto"
+          />
+          <img
             src="/brand/logo-with-text.webp"
             alt="BBTS Logo"
-            className="h-12 w-auto"
+            className="hidden md:block h-10 w-auto"
           />
         </Link>
 

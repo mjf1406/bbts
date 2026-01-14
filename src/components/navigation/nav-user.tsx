@@ -58,7 +58,7 @@ export function NavUser({
   }
 
   // Don't show user if they don't have an ID (not authorized)
-  if (!user?.id) {
+  if (!user.id) {
     return <NavUserSignedOut />
   }
 
