@@ -89,7 +89,17 @@ function App() {
                 law, you have the right to reproduce copyrighted material for
                 your own personal, non-commercial use. This right is protected
                 by the <strong>Fair Use Doctrine</strong> codified in{' '}
-                <strong>17 U.S.C. § 107</strong> of the Copyright Act.
+                <strong>
+                  <a
+                    href="https://www.law.cornell.edu/uscode/text/17/107"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-primary"
+                  >
+                    17 U.S.C. § 107
+                  </a>
+                </strong>{' '}
+                of the Copyright Act.
               </p>
               <p className="text-sm">
                 The Fair Use Doctrine allows limited use of copyrighted material
@@ -110,10 +120,20 @@ function App() {
                 </li>
               </ul>
               <p className="text-sm">
-                Additionally, <strong>17 U.S.C. § 109</strong> (the First Sale
-                Doctrine) grants the owner of a lawfully made copy the right to
-                dispose of that copy, including making personal backup copies
-                for archival purposes.
+                Additionally,{' '}
+                <strong>
+                  <a
+                    href="https://www.law.cornell.edu/uscode/text/17/109"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-primary"
+                  >
+                    17 U.S.C. § 109
+                  </a>
+                </strong>{' '}
+                (the First Sale Doctrine) grants the owner of a lawfully made
+                copy the right to dispose of that copy, including making
+                personal backup copies for archival purposes.
               </p>
               <p className="text-sm font-medium">
                 <strong>Note:</strong> This legal protection applies only to
@@ -152,11 +172,28 @@ function App() {
                   </AccordionTrigger>
                   <AccordionContent>
                     Yes. Under United States copyright law, specifically the
-                    Fair Use Doctrine (17 U.S.C. § 107) and the First Sale
-                    Doctrine (17 U.S.C. § 109), you have the right to reproduce
-                    copyrighted material for your own personal, non-commercial
-                    use. This includes making personal backup copies and using
-                    the material for personal study and research.
+                    Fair Use Doctrine (
+                    <a
+                      href="https://www.law.cornell.edu/uscode/text/17/107"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-primary"
+                    >
+                      17 U.S.C. § 107
+                    </a>
+                    ) and the First Sale Doctrine (
+                    <a
+                      href="https://www.law.cornell.edu/uscode/text/17/109"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-primary"
+                    >
+                      17 U.S.C. § 109
+                    </a>
+                    ), you have the right to reproduce copyrighted material for
+                    your own personal, non-commercial use. This includes making
+                    personal backup copies and using the material for personal
+                    study and research.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -165,13 +202,21 @@ function App() {
                     What is the Fair Use Doctrine?
                   </AccordionTrigger>
                   <AccordionContent>
-                    The Fair Use Doctrine (17 U.S.C. § 107) allows limited use
-                    of copyrighted material without permission from the
-                    copyright holder for purposes such as personal study,
-                    research, and private use. The doctrine considers factors
-                    including the purpose and character of the use (personal,
-                    non-commercial use is favored), the nature of the
-                    copyrighted work, the amount used, and the effect on the
+                    The Fair Use Doctrine (
+                    <a
+                      href="https://www.law.cornell.edu/uscode/text/17/107"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-primary"
+                    >
+                      17 U.S.C. § 107
+                    </a>
+                    ) allows limited use of copyrighted material without
+                    permission from the copyright holder for purposes such as
+                    personal study, research, and private use. The doctrine
+                    considers factors including the purpose and character of the
+                    use (personal, non-commercial use is favored), the nature of
+                    the copyrighted work, the amount used, and the effect on the
                     potential market for the work.
                   </AccordionContent>
                 </AccordionItem>
@@ -181,12 +226,20 @@ function App() {
                     What is the First Sale Doctrine?
                   </AccordionTrigger>
                   <AccordionContent>
-                    The First Sale Doctrine (17 U.S.C. § 109) grants the owner
-                    of a lawfully made copy the right to dispose of that copy,
-                    including making personal backup copies for archival
-                    purposes. This means if you legally purchased the original
-                    material, you have rights to make personal copies for your
-                    own use.
+                    The First Sale Doctrine (
+                    <a
+                      href="https://www.law.cornell.edu/uscode/text/17/109"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-primary"
+                    >
+                      17 U.S.C. § 109
+                    </a>
+                    ) grants the owner of a lawfully made copy the right to
+                    dispose of that copy, including making personal backup copies
+                    for archival purposes. This means if you legally purchased
+                    the original material, you have rights to make personal
+                    copies for your own use.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -198,9 +251,26 @@ function App() {
                     Only the developer who created this site has the ability to
                     access the data stored within this application. This is in
                     accordance with the personal use reproduction rights
-                    protected under 17 U.S.C. § 107 and 17 U.S.C. § 109, as this
-                    site was created as a duplication of copyrighted work for
-                    personal use.
+                    protected under{' '}
+                    <a
+                      href="https://www.law.cornell.edu/uscode/text/17/107"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-primary"
+                    >
+                      17 U.S.C. § 107
+                    </a>{' '}
+                    and{' '}
+                    <a
+                      href="https://www.law.cornell.edu/uscode/text/17/109"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-primary"
+                    >
+                      17 U.S.C. § 109
+                    </a>
+                    , as this site was created as a duplication of copyrighted
+                    work for personal use.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

@@ -16,8 +16,28 @@ export function DataAccessNotice() {
               the ability to access the data stored within this application
               which is in accordance with the personal use reproduction rights
               protected under{' '}
-              <strong className="text-foreground">17 U.S.C. § 107</strong> and{' '}
-              <strong className="text-foreground">17 U.S.C. § 109</strong>.
+              <strong className="text-foreground">
+                <a
+                  href="https://www.law.cornell.edu/uscode/text/17/107"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-primary"
+                >
+                  17 U.S.C. § 107
+                </a>
+              </strong>{' '}
+              and{' '}
+              <strong className="text-foreground">
+                <a
+                  href="https://www.law.cornell.edu/uscode/text/17/109"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-primary"
+                >
+                  17 U.S.C. § 109
+                </a>
+              </strong>
+              .
             </p>
           </CardContent>
         </Card>
