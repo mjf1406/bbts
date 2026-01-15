@@ -25,6 +25,7 @@ const _schema = i.schema({
       created: i.date().optional(),
       updated: i.date().optional(),
       lastLogon: i.date().optional(),
+      trackingStartDate: i.date().optional(), // Must be a Monday
     }),
     exercises: i.entity({
       name: i.string().unique().indexed(),
@@ -46,6 +47,19 @@ const _schema = i.schema({
       earlySetRPE: i.string().optional(),
       lastSetRPE: i.string().optional(),
       rest: i.string().optional(),
+      created: i.date().indexed().optional(),
+      updated: i.date().indexed().optional(),
+    }),
+    tracking: i.entity({
+      // Exercise is linked to the exercise in `exercises`
+      // Exercise number is linked in `program`
+      weight: i.number().optional(),
+      reps: i.number().optional(),
+      sets: i.number().optional(),
+      earlySetRPE: i.number().optional(),
+      lastSetRPE: i.number().optional(),
+      restDuration: i.number().optional(),
+      notes: i.string().optional(),
       created: i.date().indexed().optional(),
       updated: i.date().indexed().optional(),
     }),
@@ -89,6 +103,43 @@ const _schema = i.schema({
         on: 'exercises',
         has: 'many',
         label: 'programs',
+      },
+    },
+    trackingExercise: {
+      forward: {
+        on: 'tracking',
+        has: 'one',
+        label: 'exercise',
+      },
+      reverse: {
+        on: 'exercises',
+        has: 'many',
+        label: 'tracking',
+      },
+    },
+    trackingProgram: {
+      forward: {
+        on: 'tracking',
+        has: 'one',
+        label: 'program',
+      },
+      reverse: {
+        on: 'program',
+        has: 'many',
+        label: 'tracking',
+      },
+    },
+    userTracking: {
+      forward: {
+        on: 'tracking',
+        has: 'one',
+        label: 'owner',
+        onDelete: 'cascade',
+      },
+      reverse: {
+        on: '$users',
+        has: 'many',
+        label: 'tracking',
       },
     },
   },

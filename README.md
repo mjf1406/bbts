@@ -25,6 +25,10 @@ This is a replication of Jeff Nippard's bodybuilding system which can be purchas
 
 ### Change Log
 
+#### 2026/01/15
+
+- FT: Tracking v0
+
 #### 2026/01/14
 
 - UI: added loading page
